@@ -11,13 +11,13 @@ import { Link } from "react-router-dom";
 
 function RenderPartner({ partner }) {
   if (partner) {
-    const { img, name, description } = partner;
+    const { image, name, description } = partner;
     return (
       <>
-        <Media object src={img} alter={name} width="150" />
+        <Media object src={image} alter={name} width="150" />
         <Media body className="ml-5 mb-4">
           <Media heading>{name}</Media>
-          <Media heading>{description}</Media>
+          <Media >{description}</Media>
         </Media>
       </>
     );
@@ -25,11 +25,13 @@ function RenderPartner({ partner }) {
 }
 
 function About(props) {
-  const partners =
-    props.partners ||
-    [].map((partner) => {
-      return <h5>{partner.name}</h5>;
-    });
+  const partners = (props.partners || []).map((partner) => (
+      // removed in Task 3
+      //return <h5>{partner.name}</h5>;
+      <Media tag="li" key={partner.id}>
+        <RenderPartner partner={partner} />
+      </Media>
+    ));
 
   return (
     <div className="container">
