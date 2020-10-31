@@ -22,20 +22,20 @@ class Contact extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleInputChange(event) {
+    handleInputChange(event) {  //handles changes in form elements
         const target = event.target;
         const name = target.name;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const value = target.type === 'checkbox' ? target.checked : target.value;  //if they type of form element that triggered this event is a checkbox, than value comes from value' checked attribute, if not checkbox, values comes from target's value.
 
-        this.setState({
+        this.setState({ 
             [name]: value
         });
     }
 
-    handleSubmit(event) {
-        console.log('Current state is: ' + JSON.stringify(this.state));
+    handleSubmit(event) {  //handles submission of form
+        console.log('Current state is: ' + JSON.stringify(this.state));  //makes string from a JavaScript object
         alert('Current state is: ' + JSON.stringify(this.state));
-        event.preventDefault();
+        event.preventDefault();  //this will prevent the entire page from being refreshed when the form is submitted.
     }
 
     render() {
@@ -153,7 +153,6 @@ class Contact extends Component {
             </div>
         );
     }
-}                
-            
+}                        
 
 export default Contact;
