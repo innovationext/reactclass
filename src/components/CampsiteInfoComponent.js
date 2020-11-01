@@ -45,6 +45,11 @@ function RenderComments({ comments }) {
   } else return <div />;
 }
 
+//class CommentForm extends Component {
+//  
+//}
+
+
 function CampsiteInfo(props) {
   if (props.campsite) {
     return (
