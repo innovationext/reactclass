@@ -1,5 +1,7 @@
-import React from "react";
-import { Card, CardImg, CardText, CardBody, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import React, { Component } from "react";
+import { Card, CardImg, CardText, CardBody, Breadcrumb, BreadcrumbItem,
+  Button
+  } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 
@@ -45,9 +47,15 @@ function RenderComments({ comments }) {
   } else return <div />;
 }
 
-//class CommentForm extends Component {
-//  
-//}
+class CommentForm extends Component {
+  render() {
+    return (
+      <React.Fragment>
+         <button outline color="secondary" className="fa-lg" outline="true"><i class="fa fa-pencil"></i> Submit Comment </button>
+      </React.Fragment>
+    );
+  };
+}
 
 
 function CampsiteInfo(props) {
@@ -66,7 +74,10 @@ function CampsiteInfo(props) {
           </div>
           <div className="row">
               <RenderCampsite campsite={props.campsite} />
-              <RenderComments comments={props.comments} />
+              <div className="col">
+                <RenderComments comments={props.comments} />
+                <CommentForm />
+              </div>
           </div>
       </div>
   );
