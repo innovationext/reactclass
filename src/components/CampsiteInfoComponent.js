@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { Card, CardImg, CardText, CardBody, Breadcrumb, BreadcrumbItem,
   Button,
-  Modal, ModalHeader, ModalBody,
-  Form, FormGroup, Input, Label} from 'reactstrap';
+  Modal, ModalHeader, ModalBody, Label} from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Control, LocalForm, Errors } from 'react-redux-form';
 
-
+const required = val => val && val.length;
+const maxLength = len => val => !val || (val.length <= len);
+const minLength = len => val => val && (val.length >= len);
+const isNumber = val => !isNaN(+val);
+const validEmail = val => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
 
  function RenderCampsite({campsite}) {
@@ -43,6 +47,7 @@ function RenderComments({ comments }) {
             </div>
           );
         })}
+        <CommentForm />
       </div>
     );
   } else return <div />;
@@ -54,38 +59,97 @@ class CommentForm extends Component {
     this.state =  {
                     isModalOpen: false
                   };
-  }
+            
+                  this.toggleModal = this.toggleModal.bind(this);
+   }                                
+   
+  toggleModal() {
+                  this.setState({
+                                    isModalOpen: !this.state.isModalOpen
+                                });
+  }        
+  
+  handleSubmit(values) {  //handles submission of form
+    console.log('Current state is: ' + JSON.stringify(values));  //makes string from a JavaScript object
+    alert('Current state is: ' + JSON.stringify(values));
+    //event.preventDefault();  //this will prevent the entire page from being refreshed when the form is submitted.
+}
+
+  
   render() {
     return (
       <React.Fragment>
-         <button outline color="secondary" className="fa-lg" outline="true"><i class="fa fa-pencil"></i> Submit Comment </button>
-
-
-         <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-                    <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
-                    <ModalBody>
-                        <Form onSubmit={this.handleLogin}>
-                            <FormGroup>
-                                <Label htmlFor="username">Username</Label>
-                                <Input type="text" id="username" name="username"
-                                    innerRef={input => this.username = input } />
-                            </FormGroup>
-                            <FormGroup>
-                            <Label htmlFor="password">Password</Label>
-                                <Input type="password" id="password" name="password" 
-                                    innerRef={input => this.password = input} />
-                            </FormGroup>
-                            <FormGroup check>
-                                <Label check>
-                                    <Input type="checkbox" name="remember" 
-                                        innerRef={input => this.remember = input} />
-                                    Remember me
-                                </Label>
-                            </FormGroup>
-                            <Button type="submit" value="submit" color="primary">Login</Button>
-                        </Form>
-                    </ModalBody>
-                </Modal>
+        <button outline className="fa-lg" onClick={this.toggleModal}>
+          <i class="fa fa-pencil"></i> Submit Comment{" "}
+        </button>
+        <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>Comments</ModalHeader>
+          <ModalBody>
+            <LocalForm onSubmit={values => this.handleSubmit(values)}>
+              <div className="form-control">
+                <Label htmlFor="Rating">
+                  Rating
+                </Label>
+                <Control.select
+                  model=".rating"
+                  name="rating"
+                  className="form-control"
+                >
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </Control.select>
+              </div>
+              <div className="from-control">
+                <Label htmlFor="Author">
+                  Author
+                </Label>
+                <Control.text
+                  model=".author"
+                  id="author"
+                  name="author"
+                  placeholder="Your Name"
+                  className="form-control"
+                  validators={{
+                    required,
+                    minLength: minLength(2),
+                    maxLength: maxLength(15),
+                  }}
+                />
+                <Errors
+                  className="text-danger"
+                  model=".author"
+                  show="touched"
+                  component="div"
+                  messages={{
+                    // required: "Required",
+                    minLength: "Must be at least 2 characters",
+                    maxLength: "Must be 15 characters or less",
+                  }}
+                />
+              </div>
+              <div>
+                <Label htmlFor="Comment" md={2}>
+                  Comment
+                </Label>
+                <Control.textarea
+                  model=".text"
+                  id="text"
+                  name="text"
+                  rows="6"
+                  className="form-control"
+                />
+              </div>
+              <div>
+                <Button type="submit" color="primary">
+                  Submit
+                </Button>
+              </div>
+            </LocalForm>
+          </ModalBody>
+        </Modal>
       </React.Fragment>
     );
   };
@@ -110,7 +174,7 @@ function CampsiteInfo(props) {
               <RenderCampsite campsite={props.campsite} />
               <div className="col">
                 <RenderComments comments={props.comments} />
-                <CommentForm />
+                
               </div>
           </div>
       </div>
